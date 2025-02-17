@@ -11,12 +11,18 @@ $id = "245150407111038";
     <title>Profil</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
+
+<body class="flex min-h-screen bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
+    <?php include "layout/header.html"; ?>
+
+
 
     <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg text-center">
         <h1 class="text-2xl font-semibold">Hello, <span class="text-yellow-300"><?= $name; ?></span>!</h1>
         <p class="mt-2 text-lg">NIM saya adalah <span class="font-bold text-yellow-300"><?= $id; ?></span></p>
     </div>
+
+<?php include "layout/footer.html"; ?>
 
 </body>
 </html>
