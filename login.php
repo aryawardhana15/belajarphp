@@ -16,7 +16,7 @@
 <body>
 
     <h3>Login</h3>
-    <form action="login.php" method="POST">
+    <form action="login.php" method="POST" classname="flex flex-col gap-2">
         <input type="text" name="email" placeholder="email">
         <input type="password" name="password" placeholder="password">
         <button type="submit" name="login">Login</button>
