@@ -11,7 +11,6 @@
 <?php include "layout/header.html"; ?>
 
     
-    
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg md:w-1/2 lg:w-1/3 mx-auto mt-12">
         <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">Register</h3>
         <form action="register.php" method="POST" class="space-y-6" onsubmit="return validateForm()">

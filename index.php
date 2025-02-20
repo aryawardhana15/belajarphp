@@ -1,6 +1,6 @@
 <?php
-$name = "Muhammad Alhafiz Arya Wardhana";
-$id = "245150407111038";
+$name = "welcome to website belajar arya";
+
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +19,6 @@ $id = "245150407111038";
 
     <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg text-center">
         <h1 class="text-2xl font-semibold">Hello, <span class="text-yellow-300"><?= $name; ?></span>!</h1>
-        <p class="mt-2 text-lg">NIM saya adalah <span class="font-bold text-yellow-300"><?= $id; ?></span></p>
     </div>
 
 <?php include "layout/footer.html"; ?>
