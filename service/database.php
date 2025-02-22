@@ -1,16 +1,14 @@
 <?php
-$servername = "localhost";
-$database = "belajar";
-$username = "root";
-$password = "";
+$servername = "localhost"; // Host database
+$username = "root"; // Username database
+$password = ""; // Password database (kosongkan jika tidak ada)
+$dbname = "belajar"; // Nama database
 
-// Membuat koneksi
-$conn = mysqli_connect($servername, $username, $password, $database);
+// Buat koneksi
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-// Mengecek koneksi
-if (!$conn) {
-    die("Koneksi Gagal : " . mysqli_connect_error());
-} else {
-    echo "Koneksi Berhasil";
+// Cek koneksi
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 ?>
