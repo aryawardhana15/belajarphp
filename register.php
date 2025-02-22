@@ -2,7 +2,9 @@
 session_start();
 
 // Include file koneksi database
-include 'database.php';
+if (!include 'database.php') {
+    die("Gagal memuat file database.php.");
+}
 
 // Cek koneksi database
 if ($conn) {
@@ -10,6 +12,8 @@ if ($conn) {
 } else {
     echo "Gagal terhubung ke database.";
 }
+
+
 
 // Inisialisasi variabel error
 $errors = [];
@@ -129,6 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+
 // Generate CSRF token
 $csrf_token = bin2hex(random_bytes(32));
 $_SESSION['csrf_token'] = $csrf_token;
@@ -150,7 +155,7 @@ $_SESSION['csrf_token'] = $csrf_token;
         <form action="register.php" method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="return validateForm()">
             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
 
-            <!-- Nama Lengkap -->
+           
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
                 <input type="text" name="name" id="name" placeholder="Enter your full name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
