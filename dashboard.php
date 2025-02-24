@@ -22,7 +22,7 @@
             <div class="p-6">
                 <div class="flex items-center gap-2">
                     <img src="images/logo.png" alt="arya logo" class="w-8 h-8">
-                    <h2 class="text-xl font-bold">Dashboard<span class="text-red-500">Belajar</span></h2>
+                    <h2 class="text-xl font-bold">Dashboard.<span class="text-red-500">Belajar</span></h2>
                 </div>
                 <div class="mt-6">
                     <a href="dashboard.html" class="flex items-center gap-2 p-2 text-blue-600 bg-blue-50 rounded-lg">
