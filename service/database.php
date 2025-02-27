@@ -1,14 +1,15 @@
 <?php
-$servername = "localhost"; // Host database
-$username = "root"; // Username database
-$password = ""; // Password database (kosongkan jika tidak ada)
-$dbname = "belajar"; // Nama database
+$host = 'localhost';
+$user = 'root'; // Default user XAMPP
+$password = 'hafiz1180'; // Default password XAMPP biasanya kosong
+$database = 'form'; // Ganti sesuai nama database kamu
 
-// Buat koneksi
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($host, $user, $password, $database);
+
+
 
 // Cek koneksi
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Koneksi gagal: " . $conn->connect_error);
 }
 ?>

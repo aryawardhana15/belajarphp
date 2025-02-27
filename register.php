@@ -1,143 +1,97 @@
 <?php
 session_start();
 
-// Include file koneksi database
-if (!include 'database.php') {
-    die("Gagal memuat file database.php.");
+include_once 'service/database.php'; // Sesuaikan path
+
+if (!$conn) {
+    die("Gagal memuat koneksi database.");
 }
 
-// Cek koneksi database
-if ($conn) {
-    echo "Koneksi ke database 'belajar' berhasil!";
-} else {
-    echo "Gagal terhubung ke database.";
+if(isset($_POST['login'])) {
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash password sebelum masuk database
+    $gender = $_POST['gender'];
+
+    $sql = "INSERT INTO users (name, email, password, gender) 
+            VALUES ('$username', '$email', '$password', '$gender')";
+
+    if($conn->query($sql) === TRUE) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 }
 
-
-
-// Inisialisasi variabel error
 $errors = [];
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validasi CSRF Token
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         die("CSRF token validation failed.");
     }
 
-    // Validasi Nama
     if (empty($_POST['name'])) {
         $errors['name'] = 'Nama lengkap harus diisi.';
     }
 
-    // Validasi Email
     if (empty($_POST['email'])) {
         $errors['email'] = 'Alamat email harus diisi.';
     } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Format email tidak valid.';
     }
 
-    // Validasi Password
     if (empty($_POST['password'])) {
         $errors['password'] = 'Password harus diisi.';
     } elseif (strlen($_POST['password']) < 6) {
         $errors['password'] = 'Password minimal 6 karakter.';
     }
 
-    // Validasi Konfirmasi Password
     if ($_POST['password'] !== $_POST['confirm-password']) {
         $errors['confirm-password'] = 'Password tidak sama.';
     }
 
-    // Validasi Gender
     if (empty($_POST['gender'])) {
         $errors['gender'] = 'Gender harus dipilih.';
     }
 
-    // Validasi Terms and Conditions
     if (!isset($_POST['terms'])) {
         $errors['terms'] = 'Anda harus menyetujui terms and conditions.';
     }
 
-    // Validasi Captcha
-    $secretKey = "your_secret_key";
-    $responseKey = $_POST['g-recaptcha-response'];
-    $userIP = $_SERVER['REMOTE_ADDR'];
-    $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$responseKey&remoteip=$userIP";
-    $response = file_get_contents($url);
-    $response = json_decode($response);
-    if (!$response->success) {
-        $errors['captcha'] = 'Captcha verification failed.';
-    }
-
-    // Jika tidak ada error, proses data
     if (empty($errors)) {
-        // Escape input untuk menghindari SQL injection
         $name = $conn->real_escape_string($_POST['name']);
         $email = $conn->real_escape_string($_POST['email']);
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash password
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $gender = $conn->real_escape_string($_POST['gender']);
 
-        // Handle upload foto profil
-        if (isset($_FILES['profile-picture'])) {
-            $target_dir = "uploads/";
-            $target_file = $target_dir . basename($_FILES["profile-picture"]["name"]);
-            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $sql = "INSERT INTO users (name, email, password, gender) VALUES ('$name', '$email', '$password', '$gender')";
+        if ($conn->query($sql) === TRUE) {
+            $to = $email;
+            $subject = "Konfirmasi Registrasi";
+            $message = "Terima kasih telah mendaftar, $name!";
+            $headers = "From: no-reply@example.com";
 
-            // Cek apakah file adalah gambar
-            $check = getimagesize($_FILES["profile-picture"]["tmp_name"]);
-            if ($check === false) {
-                $errors['profile-picture'] = 'File bukan gambar.';
-            }
-
-            // Cek ukuran file
-            if ($_FILES["profile-picture"]["size"] > 500000) {
-                $errors['profile-picture'] = 'Ukuran file terlalu besar.';
-            }
-
-            // Cek format file
-            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-                $errors['profile-picture'] = 'Hanya file JPG, JPEG, PNG & GIF yang diperbolehkan.';
-            }
-
-            if (empty($errors['profile-picture'])) {
-                if (move_uploaded_file($_FILES["profile-picture"]["tmp_name"], $target_file)) {
-                    $profile_picture = $target_file;
-                } else {
-                    $errors['profile-picture'] = 'Gagal mengupload file.';
-                }
-            }
-        }
-
-        // Jika tidak ada error, simpan data ke database
-        if (empty($errors)) {
-            $sql = "INSERT INTO users (name, email, password, gender, profile_picture) VALUES ('$name', '$email', '$password', '$gender', '$profile_picture')";
-            if ($conn->query($sql) === TRUE) {
-                // Kirim email konfirmasi
-                $to = $email;
-                $subject = "Konfirmasi Registrasi";
-                $message = "Terima kasih telah mendaftar, $name!";
-                $headers = "From: no-reply@example.com";
-
-                if (mail($to, $subject, $message, $headers)) {
-                    // Redirect ke halaman sukses
-                    header("Location: welcome.php");
-                    exit();
-                } else {
-                    $errors['email'] = 'Gagal mengirim email konfirmasi.';
-                }
+            if (mail($to, $subject, $message, $headers)) {
+                header("Location: welcome.php");
+                exit();
             } else {
-                $errors['database'] = 'Error: ' . $sql . '<br>' . $conn->error;
+                $errors['email'] = 'Gagal mengirim email konfirmasi.';
             }
+        } else {
+            $errors['database'] = 'Error: ' . $sql . '<br>' . $conn->error;
         }
     }
 }
 
-
-
 $csrf_token = bin2hex(random_bytes(32));
 $_SESSION['csrf_token'] = $csrf_token;
 ?>
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -210,13 +164,13 @@ $_SESSION['csrf_token'] = $csrf_token;
             </div>
 
             <!-- Upload Foto Profil -->
-            <div>
+            <!-- <div>
                 <label for="profile-picture" class="block text-sm font-medium text-gray-700">Foto Profil</label>
                 <input type="file" name="profile-picture" id="profile-picture" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 <?php if (isset($errors['profile-picture'])): ?>
                     <p id="profile-picture-error" class="text-red-500 text-sm mt-1"><?php echo $errors['profile-picture']; ?></p>
                 <?php endif; ?>
-            </div>
+            </div> -->
 
             <!-- Terms and Conditions -->
             <div class="flex items-center">
@@ -229,11 +183,11 @@ $_SESSION['csrf_token'] = $csrf_token;
                 <p id="terms-error" class="text-red-500 text-sm mt-1"><?php echo $errors['terms']; ?></p>
             <?php endif; ?>
 
-            <!-- Captcha -->
+            <!-- Captcha
             <div class="g-recaptcha" data-sitekey="your_site_key"></div>
             <?php if (isset($errors['captcha'])): ?>
                 <p id="captcha-error" class="text-red-500 text-sm mt-1"><?php echo $errors['captcha']; ?></p>
-            <?php endif; ?>
+            <?php endif; ?> -->
 
             <!-- Submit Button -->
             <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
