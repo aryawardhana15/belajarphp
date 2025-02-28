@@ -18,7 +18,7 @@ $name = "welcome to website belajar arya";
 
 
     <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg text-center">
-        <h1 class="text-2xl font-semibold">Hello, <span class="text-yellow-300"><?= $name; ?></span>!</h1>
+        <h1 class="text-2xl font-semibold">Hai, <span class="text-yellow-300"><?= $name; ?></span>!</h1>
     </div>
 
 <?php include "layout/footer.html"; ?>
