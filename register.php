@@ -183,11 +183,11 @@ $_SESSION['csrf_token'] = $csrf_token;
                 <p id="terms-error" class="text-red-500 text-sm mt-1"><?php echo $errors['terms']; ?></p>
             <?php endif; ?>
 
-            <!-- Captcha
+            <!-- Captcha -->
             <div class="g-recaptcha" data-sitekey="your_site_key"></div>
             <?php if (isset($errors['captcha'])): ?>
                 <p id="captcha-error" class="text-red-500 text-sm mt-1"><?php echo $errors['captcha']; ?></p>
-            <?php endif; ?> -->
+          <?php endif; ?>   <!-- error masih setelah ini di fix -->
 
             <!-- Submit Button -->
             <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
