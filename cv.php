@@ -123,7 +123,7 @@ $foto = $_SESSION['foto'] ?? 'default.jpg'; // Jika tidak ada foto, gunakan defa
         <!-- Tombol Edit dan Logout -->
         <div class="mt-8 flex justify-center space-x-4">
             <a href="form.php" class="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition duration-300 flex items-center">
-                <i class="fas fa-edit mr-2"></i> Edit CV
+                <i class="fas fa-edit mr-2"></i> Edit CV.
             </a>
             <a href="logout.php" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300 flex items-center">
                 <i class="fas fa-sign-out-alt mr-2"></i> Logout
