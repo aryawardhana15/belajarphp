@@ -163,7 +163,7 @@ $_SESSION['csrf_token'] = $csrf_token;
                 <?php endif; ?>
             </div>
 
-            <!-- Upload Foto Profil -->
+          
             <!-- <div>
                 <label for="profile-picture" class="block text-sm font-medium text-gray-700">Foto Profil</label>
                 <input type="file" name="profile-picture" id="profile-picture" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
